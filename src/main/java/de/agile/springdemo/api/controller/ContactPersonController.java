@@ -6,6 +6,7 @@ import de.agile.springdemo.domain.vo.ContactPersonVO;
 import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.hateoas.server.ExposesResourceFor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,28 +32,31 @@ public class ContactPersonController {
         return contactPersonService.findAllContactPersons();
     }
 
+    @PreAuthorize("hasRole('APIUSER_READWRITE')")
     @GetMapping("/{contactPersonId}")
     public ResponseEntity<ContactPersonVO> getPersonById(@PathVariable Long contactPersonId) {
         return ResponseEntity.of(contactPersonService.findById(contactPersonId));
     }
 
+    @PreAuthorize("hasRole('APIUSER_READWRITE')")
     @DeleteMapping("/{contactPersonId}")
     public ResponseEntity deleteById(@PathVariable Long contactPersonId) {
         contactPersonService.deleteById(contactPersonId);
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('APIUSER_READWRITE')")
     @PostMapping
     public ResponseEntity<ContactPersonVO> createContactPerson(@Valid @RequestBody ContactPersonVO contactPerson) {
         return ResponseEntity.ok(contactPersonService.insert(contactPerson));
     }
 
+    @PreAuthorize("hasRole('APIUSER_READWRITE')")
     @PutMapping("/{contactPersonId}")
     public ResponseEntity<ContactPersonVO> updateContactPerson(@Valid @RequestBody ContactPersonVO contactPerson) {
         contactPersonService.update(contactPerson);
         return ResponseEntity.noContent().build();
     }
-
 
 
 }
