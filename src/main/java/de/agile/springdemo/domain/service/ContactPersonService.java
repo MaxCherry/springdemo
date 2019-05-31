@@ -5,6 +5,7 @@ import com.google.common.collect.Ordering;
 import de.agile.springdemo.api.mapper.ContactPersonMapper;
 import de.agile.springdemo.domain.entity.ContactPerson;
 import de.agile.springdemo.domain.entity.Salutation;
+import de.agile.springdemo.domain.repository.ContactPersonRepository;
 import de.agile.springdemo.domain.vo.ContactPersonVO;
 import org.springframework.stereotype.Service;
 
@@ -15,60 +16,40 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-/**
- * Created on 28.05.1
- */
-
 @Service
 public class ContactPersonService {
 
-    private List<ContactPerson> people;
-    private Random random = new Random();
     private ContactPersonMapper contactPersonMapper;
+    private ContactPersonRepository contactPersonRepository;
 
-    public ContactPersonService(ContactPersonMapper contactPersonMapper) {
+    public ContactPersonService(ContactPersonMapper contactPersonMapper, ContactPersonRepository contactPersonRepository) {
         this.contactPersonMapper = contactPersonMapper;
+        this.contactPersonRepository = contactPersonRepository;
     }
 
-    @PostConstruct
-    void init() {
-        ContactPerson samplePerson =  ContactPerson.builder()
-                .id(-1l)
-                .salutation(Salutation.MR)
-                .lastName("Cherry")
-                .firstName("Max")
-                .phoneNumber("+491735555575")
-                .build();
-        people = Lists.newArrayList(samplePerson);
-    }
 
     public List<ContactPersonVO> findAllContactPersons() {
-
-       return Ordering.from(Comparator.comparingLong(ContactPersonVO::getId))
-               .sortedCopy(people
-               .stream()
-               .map(contactPerson -> contactPersonMapper.contactPersonToContactPersonVO(contactPerson))
-               .collect(Collectors.toList()));
+        List<ContactPersonVO> result = Lists.newArrayList();
+        contactPersonRepository.findAll().forEach(contactPerson -> result.add(contactPersonMapper.contactPersonToContactPersonVO(contactPerson)));
+        return result;
     }
 
     public Optional<ContactPersonVO> findById(Long contactPersonId) {
-        return findAllContactPersons().stream().filter(contactPerson -> contactPerson.getId().equals(contactPersonId)).findFirst();
+        return contactPersonRepository.findById(contactPersonId).map(contactPerson -> contactPersonMapper.contactPersonToContactPersonVO(contactPerson));
     }
 
     public void deleteById(Long contactPersonId) {
-        findAllContactPersons().removeIf(contactPerson -> contactPerson.getId().equals(contactPersonId));
+        contactPersonRepository.deleteById(contactPersonId);
     }
 
     public ContactPersonVO insert(ContactPersonVO contactPersonVO) {
         ContactPerson contactPerson = contactPersonMapper.contactPersonVOToContactPerson(contactPersonVO);
-        contactPerson.setId(random.nextLong());
-        people.add(contactPerson);
+        contactPerson = contactPersonRepository.save(contactPerson);
         return contactPersonMapper.contactPersonToContactPersonVO(contactPerson);
     }
 
     public void update(ContactPersonVO contactPerson) {
-       deleteById(contactPerson.getId());
-       insert(contactPerson);
+        contactPersonRepository.save(contactPersonMapper.contactPersonVOToContactPerson(contactPerson));
     }
 
 
