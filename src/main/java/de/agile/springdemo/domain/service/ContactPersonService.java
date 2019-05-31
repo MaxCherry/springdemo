@@ -3,9 +3,12 @@ package de.agile.springdemo.domain.service;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import de.agile.springdemo.api.mapper.ContactPersonMapper;
+import de.agile.springdemo.config.PreloadContactPersonConfig;
 import de.agile.springdemo.domain.entity.ContactPerson;
 import de.agile.springdemo.domain.entity.Salutation;
 import de.agile.springdemo.domain.vo.ContactPersonVO;
+import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -20,26 +23,17 @@ import java.util.stream.Collectors;
  */
 
 @Service
+@Slf4j
 public class ContactPersonService {
 
     private List<ContactPerson> people;
     private Random random = new Random();
     private ContactPersonMapper contactPersonMapper;
 
-    public ContactPersonService(ContactPersonMapper contactPersonMapper) {
+    public ContactPersonService(ContactPersonMapper contactPersonMapper, PreloadContactPersonConfig preloadContactPersonConfig) {
         this.contactPersonMapper = contactPersonMapper;
-    }
-
-    @PostConstruct
-    void init() {
-        ContactPerson samplePerson =  ContactPerson.builder()
-                .id(-1l)
-                .salutation(Salutation.MR)
-                .lastName("Cherry")
-                .firstName("Max")
-                .phoneNumber("+491735555575")
-                .build();
-        people = Lists.newArrayList(samplePerson);
+        this.people = preloadContactPersonConfig.getUsers();
+        log.info("Initialized {} users from file", people.size());
     }
 
     public List<ContactPersonVO> findAllContactPersons() {

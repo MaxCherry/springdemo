@@ -1,0 +1,18 @@
+preload-contactpersons:
+    users:
+        -
+          id: 1
+          salutation: MR
+          firstName: Peter
+          lastName: Griffin
+          phoneNumber: "+4955512345"
+        - id: 2
+          salutation: MR
+          firstName: Glen
+          lastName: Quagmire
+          phoneNumber: "+4955512346"
+        - id: 3
+          salutation: MRS
+          firstName: Lois
+          lastName: Griffin
+          phoneNumber: "+4955512346"

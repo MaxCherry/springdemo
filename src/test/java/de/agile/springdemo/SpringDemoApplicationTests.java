@@ -1,4 +1,4 @@
-package de.agile.springdemo.konkal.konkaldemo;
+package de.agile.springdemo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
