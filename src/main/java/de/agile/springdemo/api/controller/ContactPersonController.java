@@ -48,7 +48,8 @@ public class ContactPersonController {
     }
 
     @PutMapping("/{contactPersonId}")
-    public ResponseEntity<ContactPersonVO> updateContactPerson(@Valid @RequestBody ContactPersonVO contactPerson) {
+    public ResponseEntity<ContactPersonVO> updateContactPerson(@Valid @RequestBody ContactPersonVO contactPerson, @PathVariable Long contactPersonId) {
+        contactPerson.setId(contactPersonId);
         contactPersonService.update(contactPerson);
         return ResponseEntity.noContent().build();
     }
