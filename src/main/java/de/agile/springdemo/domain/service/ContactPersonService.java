@@ -1,20 +1,14 @@
 package de.agile.springdemo.domain.service;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
 import de.agile.springdemo.api.mapper.ContactPersonMapper;
 import de.agile.springdemo.domain.entity.ContactPerson;
-import de.agile.springdemo.domain.entity.Salutation;
 import de.agile.springdemo.domain.repository.ContactPersonRepository;
 import de.agile.springdemo.domain.vo.ContactPersonVO;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 @Service
 public class ContactPersonService {
@@ -48,8 +42,11 @@ public class ContactPersonService {
         return contactPersonMapper.contactPersonToContactPersonVO(contactPerson);
     }
 
+    //@Transactional
     public void update(ContactPersonVO contactPerson) {
         contactPersonRepository.save(contactPersonMapper.contactPersonVOToContactPerson(contactPerson));
+        //List<Object> objects = Collections.emptyList();
+        //objects.get(5);
     }
 
 
