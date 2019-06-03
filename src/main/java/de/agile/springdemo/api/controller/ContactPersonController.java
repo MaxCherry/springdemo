@@ -3,7 +3,6 @@ package de.agile.springdemo.api.controller;
 import de.agile.springdemo.domain.entity.ContactPerson;
 import de.agile.springdemo.domain.service.ContactPersonService;
 import de.agile.springdemo.domain.vo.ContactPersonVO;
-import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.hateoas.server.ExposesResourceFor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,42 +17,43 @@ import java.util.List;
 
 @RestController
 @ExposesResourceFor(ContactPerson.class)
-@RequestMapping("api/contactpersons")
+@RequestMapping("api/customers/{customerNo}/contactPeople")
 public class ContactPersonController {
 
     private ContactPersonService contactPersonService;
 
-    public ContactPersonController(ContactPersonService contactPersonService, EntityLinks entityLinks) {
+    public ContactPersonController(ContactPersonService contactPersonService) {
         this.contactPersonService = contactPersonService;
     }
 
     @GetMapping
-    public List<ContactPersonVO> listPersons() {
-        return contactPersonService.findAllContactPersons();
+    public List<ContactPersonVO> listPersons(@PathVariable String customerNo) {
+        return contactPersonService.findAllContactPersons(customerNo);
     }
 
     @PreAuthorize("hasRole('APIUSER_READWRITE')")
     @GetMapping("/{contactPersonId}")
-    public ResponseEntity<ContactPersonVO> getPersonById(@PathVariable Long contactPersonId) {
-        return ResponseEntity.of(contactPersonService.findById(contactPersonId));
+    public ResponseEntity<ContactPersonVO> getPersonById(@PathVariable String customerNo, @PathVariable Long contactPersonId) {
+        return ResponseEntity.of(contactPersonService.findById(customerNo, contactPersonId));
     }
 
     @PreAuthorize("hasRole('APIUSER_READWRITE')")
     @DeleteMapping("/{contactPersonId}")
-    public ResponseEntity deleteById(@PathVariable Long contactPersonId) {
-        contactPersonService.deleteById(contactPersonId);
+    public ResponseEntity deleteById(@PathVariable String customerNo, @PathVariable Long contactPersonId) {
+        contactPersonService.deleteById(customerNo, contactPersonId);
         return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasRole('APIUSER_READWRITE')")
     @PostMapping
-    public ResponseEntity<ContactPersonVO> createContactPerson(@Valid @RequestBody ContactPersonVO contactPerson) {
-        return ResponseEntity.ok(contactPersonService.insert(contactPerson));
+    public ResponseEntity<ContactPersonVO> createContactPerson(@PathVariable String customerNo, @Valid @RequestBody ContactPersonVO contactPerson) {
+        return ResponseEntity.ok(contactPersonService.insert(customerNo, contactPerson));
     }
 
     @PreAuthorize("hasRole('APIUSER_READWRITE')")
     @PutMapping("/{contactPersonId}")
-    public ResponseEntity<ContactPersonVO> updateContactPerson(@Valid @RequestBody ContactPersonVO contactPerson, @PathVariable Long contactPersonId) {
+    public ResponseEntity<ContactPersonVO> updateContactPerson(@PathVariable String customerNo, @PathVariable Long contactPersonId,
+                                                               @Valid @RequestBody ContactPersonVO contactPerson) {
         contactPerson.setId(contactPersonId);
         contactPersonService.update(contactPerson);
         return ResponseEntity.noContent().build();
