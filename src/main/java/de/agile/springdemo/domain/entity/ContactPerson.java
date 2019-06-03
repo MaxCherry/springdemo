@@ -1,6 +1,5 @@
 package de.agile.springdemo.domain.entity;
 
-import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,7 +7,7 @@ import javax.persistence.*;
 /**
  * Created on 28.05.19
  * <p>
-*/
+ */
 
 
 @Data

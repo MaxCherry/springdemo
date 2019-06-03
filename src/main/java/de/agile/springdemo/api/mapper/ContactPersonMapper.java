@@ -4,7 +4,7 @@ import de.agile.springdemo.domain.entity.ContactPerson;
 import de.agile.springdemo.domain.vo.ContactPersonVO;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface ContactPersonMapper {
 
     ContactPersonVO contactPersonToContactPersonVO(ContactPerson contactPerson);
