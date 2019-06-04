@@ -1,13 +1,12 @@
 package de.agile.springdemo.domain.service;
 
 import com.google.common.collect.Lists;
-import de.agile.springdemo.api.mapper.CustomerMapper;
-import de.agile.springdemo.api.mapper.LocationMapper;
 import de.agile.springdemo.domain.entity.Customer;
 import de.agile.springdemo.domain.repository.CustomerRepository;
 import de.agile.springdemo.domain.repository.LocationRepository;
 import de.agile.springdemo.domain.vo.CustomerVO;
 import de.agile.springdemo.domain.vo.LocationVO;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,39 +17,37 @@ public class CustomerService {
 
     private CustomerRepository customerRepository;
     private LocationRepository locationRepository;
-    private CustomerMapper customerMapper;
-    private LocationMapper locationMapper;
+    private ModelMapper modelMapper;
 
-    public CustomerService(CustomerRepository customerRepository, LocationRepository locationRepository, CustomerMapper customerMapper, LocationMapper locationMapper) {
+    public CustomerService(CustomerRepository customerRepository, LocationRepository locationRepository, ModelMapper modelMapper) {
         this.customerRepository = customerRepository;
         this.locationRepository = locationRepository;
-        this.customerMapper = customerMapper;
-        this.locationMapper = locationMapper;
+        this.modelMapper = modelMapper;
     }
 
     public List<CustomerVO> findAllCustomers() {
         List<CustomerVO> result = Lists.newArrayList();
 
-        customerRepository.findAll().forEach(customer -> result.add(customerMapper.customerToCustomerVO(customer)));
+        customerRepository.findAll().forEach(customer -> result.add(modelMapper.map(customer, CustomerVO.class)));
         return result;
     }
 
     public List<CustomerVO> findCustomersWithVbkzLike(String vbkz) {
         List<CustomerVO> result = Lists.newArrayList();
-        customerRepository.findByVbkzLike(vbkz + "%").forEach(customer -> result.add(customerMapper.customerToCustomerVO(customer)));
+        customerRepository.findByVbkzLike(vbkz + "%").forEach(customer -> result.add(modelMapper.map(customer, CustomerVO.class)));
         return result;
     }
 
 
     public Optional<CustomerVO> findCustomerCustomerNo(String customerNo) {
-        return customerRepository.findById(customerNo).map(customer -> customerMapper.customerToCustomerVO(customer));
+        return customerRepository.findById(customerNo).map(customer -> modelMapper.map(customer, CustomerVO.class));
     }
 
     public List<LocationVO> findLocationsOfCustomer(String customerNo) {
         List<LocationVO> locations = Lists.newArrayList();
         Optional<Customer> customer = customerRepository.findById(customerNo);
         customer.ifPresent(customerVO -> customerVO.getLocations()
-                .forEach(location -> locations.add(locationMapper.locationToLocationVO(location))));
+                .forEach(location -> locations.add(modelMapper.map(location, LocationVO.class))));
         return locations;
 
     }
