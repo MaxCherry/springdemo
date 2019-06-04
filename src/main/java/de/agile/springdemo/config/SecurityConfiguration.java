@@ -28,15 +28,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
+        http.authorizeRequests()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.NEVER)
-                .and().antMatcher("/h2-console").anonymous()
-                .and().antMatcher("/h2-console/**").anonymous();
+                .sessionCreationPolicy(SessionCreationPolicy.NEVER);
+
     }
 
     @Override
@@ -54,7 +52,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring();
+        web.ignoring().antMatchers("/h2-console", "/h2-console/**", "/hal/**");
     }
 
     @Override
