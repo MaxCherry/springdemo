@@ -2,7 +2,6 @@ package de.agile.springdemo.api.controller;
 
 import de.agile.springdemo.domain.service.ContactPersonService;
 import de.agile.springdemo.domain.vo.ContactPersonVO;
-import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +18,7 @@ public class ContactPersonController {
 
     private ContactPersonService contactPersonService;
 
-    public ContactPersonController(ContactPersonService contactPersonService, EntityLinks entityLinks) {
+    public ContactPersonController(ContactPersonService contactPersonService) {
         this.contactPersonService = contactPersonService;
     }
 
