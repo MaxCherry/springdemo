@@ -31,13 +31,14 @@ class ContactPersonControllerTest {
     }
 
     @Test
-    public void contexLoads() throws Exception {
+    public void testControllerAvailable() {
         assertNotNull(controller);
     }
 
     @Test
     void testGetContactPerson() {
-        ResponseEntity<ContactPersonVO> responseEntity = restTemplate.getForEntity(basePath + "/api/contactpersons/1", ContactPersonVO.class);
+        ResponseEntity<ContactPersonVO> responseEntity =
+                restTemplate.getForEntity(basePath + "/api/contactpersons/1", ContactPersonVO.class);
         assertNotNull(responseEntity);
         assertEquals(200, responseEntity.getStatusCodeValue());
         assertEquals("Peter", responseEntity.getBody().getFirstName());
