@@ -46,7 +46,7 @@ public class ContactPersonService {
     }
 
     public void deleteById(Long contactPersonId) {
-        findAllContactPersons().removeIf(contactPerson -> contactPerson.getId().equals(contactPersonId));
+        people.removeIf(contactPerson -> contactPerson.getId().equals(contactPersonId));
     }
 
     public ContactPersonVO insert(ContactPersonVO contactPersonVO) {
