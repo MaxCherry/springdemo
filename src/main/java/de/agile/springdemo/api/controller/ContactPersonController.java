@@ -1,10 +1,8 @@
 package de.agile.springdemo.api.controller;
 
-import de.agile.springdemo.domain.entity.ContactPerson;
 import de.agile.springdemo.domain.service.ContactPersonService;
 import de.agile.springdemo.domain.vo.ContactPersonVO;
 import org.springframework.hateoas.server.EntityLinks;
-import org.springframework.hateoas.server.ExposesResourceFor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +14,6 @@ import java.util.List;
  */
 
 @RestController
-@ExposesResourceFor(ContactPerson.class)
 @RequestMapping("api/contactpersons")
 public class ContactPersonController {
 
@@ -53,7 +50,6 @@ public class ContactPersonController {
         contactPersonService.update(contactPerson);
         return ResponseEntity.noContent().build();
     }
-
 
 
 }

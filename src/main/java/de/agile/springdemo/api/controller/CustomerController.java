@@ -2,6 +2,7 @@ package de.agile.springdemo.api.controller;
 
 import de.agile.springdemo.domain.service.CustomerService;
 import de.agile.springdemo.domain.vo.CustomerVO;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,6 +18,7 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
+    @GetMapping
     public List<CustomerVO> getCustomers() {
         return customerService.findAllCustomers();
     }

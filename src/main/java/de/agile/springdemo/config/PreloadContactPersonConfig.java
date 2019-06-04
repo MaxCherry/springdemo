@@ -10,5 +10,5 @@ import java.util.List;
 @Data
 public class PreloadContactPersonConfig {
 
-    private List<ContactPerson> users;
+    private List<ContactPerson> contactPeople;
 }

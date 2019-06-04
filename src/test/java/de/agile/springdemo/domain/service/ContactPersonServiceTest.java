@@ -1,27 +1,21 @@
 package de.agile.springdemo.domain.service;
 
-import de.agile.springdemo.api.mapper.ContactPersonMapper;
 import de.agile.springdemo.config.PreloadContactPersonConfig;
 import de.agile.springdemo.domain.entity.ContactPerson;
 import de.agile.springdemo.domain.entity.Salutation;
 import de.agile.springdemo.domain.vo.ContactPersonVO;
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mapstruct.factory.Mappers;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -50,8 +44,8 @@ class ContactPersonServiceTest {
         contactPerson.setPhoneNumber("+49112");
         contactPerson.setSalutation(Salutation.MRS);
         contactPeople.add(contactPerson);
-        when(preloadContactPersonConfig.getUsers()).thenReturn(contactPeople);
-        contactPersonService = new ContactPersonService(Mappers.getMapper(ContactPersonMapper.class), preloadContactPersonConfig);
+        when(preloadContactPersonConfig.getContactPeople()).thenReturn(contactPeople);
+        contactPersonService = new ContactPersonService(new ModelMapper(), preloadContactPersonConfig);
     }
 
     @Test
