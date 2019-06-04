@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class CustomerService {
 
-    @Value("${my.test.name}")
+    @Value("${my.test.customerno}")
     private String sampleProperty;
 
     private PreloadContactPersonConfig contactPersonConfig;
