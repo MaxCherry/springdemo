@@ -1,0 +1,19 @@
+= Sample documentation of the ContactPerson resource with Ascii Doc and generated Snippets
+
+This is an example documentation for the service located at http://localhost:8080/api:
+
+.request
+include::{snippets}/list-contact-people/http-request.adoc[]
+
+.response fields
+
+include::{snippets}/list-contact-people/response-fields.adoc[]
+
+.example response
+include::{snippets}/list-contact-people/http-response.adoc[]
+
+As you can see the format is very simple, and in fact you always get the same message.
+
+.CURL request
+include::{snippets}/list-contact-people/curl-request.adoc[]
+
