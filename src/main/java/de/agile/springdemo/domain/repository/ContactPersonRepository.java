@@ -6,5 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ContactPersonRepository extends CrudRepository<ContactPerson, Long> {
 
+    public ContactPerson findContactPersonByFirstNameAndLastName(String firstName, String lastName);
+
 
 }
