@@ -41,6 +41,10 @@ public class ContactPersonService {
                         .collect(Collectors.toList()));
     }
 
+    public List<ContactPersonVO> findAllContactPersons(String customerNo) {
+        return findAllContactPersons();
+    }
+
     public Optional<ContactPersonVO> findById(Long contactPersonId) {
         return findAllContactPersons().stream().filter(contactPerson -> contactPerson.getId().equals(contactPersonId)).findFirst();
     }
@@ -58,7 +62,7 @@ public class ContactPersonService {
 
     public void update(ContactPersonVO contactPerson) {
         deleteById(contactPerson.getId());
-        insert(contactPerson);
+        people.add(modelMapper.map(contactPerson, ContactPerson.class));
     }
 
 

@@ -13,7 +13,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("api/contactpersons")
+@RequestMapping("api/customers/{customerNo}/contactPeople")
 public class ContactPersonController {
 
     private ContactPersonService contactPersonService;
@@ -23,28 +23,29 @@ public class ContactPersonController {
     }
 
     @GetMapping
-    public List<ContactPersonVO> listPersons() {
-        return contactPersonService.findAllContactPersons();
+    public List<ContactPersonVO> listPersons(@PathVariable String customerNo) {
+        return contactPersonService.findAllContactPersons(customerNo);
     }
 
     @GetMapping("/{contactPersonId}")
-    public ResponseEntity<ContactPersonVO> getPersonById(@PathVariable Long contactPersonId) {
+    public ResponseEntity<ContactPersonVO> getPersonById(@PathVariable String customerNo, @PathVariable Long contactPersonId) {
         return ResponseEntity.of(contactPersonService.findById(contactPersonId));
     }
 
     @DeleteMapping("/{contactPersonId}")
-    public ResponseEntity deleteById(@PathVariable Long contactPersonId) {
+    public ResponseEntity deleteById(@PathVariable String customerNo, @PathVariable Long contactPersonId) {
         contactPersonService.deleteById(contactPersonId);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping
-    public ResponseEntity<ContactPersonVO> createContactPerson(@Valid @RequestBody ContactPersonVO contactPerson) {
+    public ResponseEntity<ContactPersonVO> createContactPerson(@PathVariable String customerNo, @Valid @RequestBody ContactPersonVO contactPerson) {
         return ResponseEntity.ok(contactPersonService.insert(contactPerson));
     }
 
     @PutMapping("/{contactPersonId}")
-    public ResponseEntity<ContactPersonVO> updateContactPerson(@Valid @RequestBody ContactPersonVO contactPerson, @PathVariable Long contactPersonId) {
+    public ResponseEntity<ContactPersonVO> updateContactPerson(@PathVariable String customerNo, @PathVariable Long contactPersonId,
+                                                               @Valid @RequestBody ContactPersonVO contactPerson) {
         contactPerson.setId(contactPersonId);
         contactPersonService.update(contactPerson);
         return ResponseEntity.noContent().build();
