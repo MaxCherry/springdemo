@@ -1,5 +1,8 @@
 package de.agile.springdemo.domain.entity;
 
+import lombok.Data;
+
+@Data
 public class Location {
 
     private Long id;
