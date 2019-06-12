@@ -1,7 +1,7 @@
 package de.agile.springdemo.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -16,10 +16,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-@Configuration
+import java.util.List;
+
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    List<ApiUser> users;
 
     @Bean
     public PasswordEncoder encoder() {
@@ -31,6 +35,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .anyRequest()
                 .authenticated()
+                .and()
+                .httpBasic()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.NEVER);
@@ -45,8 +51,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     protected UserDetailsService inMemoryUserDetailsManager() {
         InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager();
-        inMemoryUserDetailsManager.createUser(User.withUsername("read").password(encoder().encode("read")).roles("APIUSER").build());
-        inMemoryUserDetailsManager.createUser(User.withUsername("readwrite").password(encoder().encode("readwrite")).roles("APIUSER_READWRITE").build());
+
+        users.forEach(apiUser -> inMemoryUserDetailsManager
+                .createUser(User
+                        .withUsername(apiUser.getUserName())
+                        .password(encoder().encode(apiUser.getPassword()))
+                        .roles(apiUser.getRoles()).build()));
+
+        ;
         return inMemoryUserDetailsManager;
     }
 
